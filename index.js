@@ -1,5 +1,7 @@
 const ctx = canvas.getContext('2d');
 
+const total_seconds = 24 * 60 * 60;
+
 function draw(progress) {
   const rows = 2, cols = 4;
   const width = 120 * cols;
@@ -19,6 +21,17 @@ function draw(progress) {
       ctx.fillRect(x + c * 120, y + r * 120, 100, 100);
     }
   }
+
+  const standard = progress * total_seconds;
+  const value = ((standard / 3600) | 0) * 100 + (standard / 60 % 60) | 0;
+  const text = (10000 + value).toString().replace(/1(..)(..)/, '$1:$2');
+
+  ctx.fillStyle = `hsl(0, 0%, 25%, 80%)`;
+  ctx.font = '48px monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'hanging';
+
+  ctx.fillText(text, canvas.width / 2, y + height + 40);
 }
 
 function resizeCanvas() {
