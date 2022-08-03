@@ -75,7 +75,14 @@ function resizeCanvas() {
 
 const params = new URLSearchParams(window.location.search);
 const mode = params.get('mode');
+const test = params.get('test');
 const size = mode == 'cmp' ? 80 : 100;
+
+let today = new Date();
+today.setHours(0);
+today.setMinutes(0);
+today.setSeconds(0);
+today.setMilliseconds(0);
 
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas, false);
@@ -85,7 +92,10 @@ var progress = 0;
 function animation_callback(timestamp) {
   if (!this.first_timestamp) this.first_timestamp = timestamp;
 
-  progress = (timestamp - this.first_timestamp) / (this.seconds * 1000);
+  if (test)
+    progress = (timestamp - this.first_timestamp) / (this.seconds * 1000);
+  else
+    progress = (Date.now() - today) / 1000 / total_seconds;
 
   draw(progress % 1);
   this.request();
