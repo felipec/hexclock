@@ -4,8 +4,9 @@ const total_seconds = 24 * 60 * 60;
 
 function draw(progress) {
   const rows = 2, cols = 4;
-  const width = 120 * cols;
-  const height = 120 * rows;
+  const size = 100;
+  const width = size * 1.2 * cols;
+  const height = size * 1.2 * rows;
   let x = (canvas.width - width) / 2;
   let y = (canvas.height - height) / 2;
 
@@ -18,7 +19,7 @@ function draw(progress) {
     for (c = 0; c < cols; c++) {
       e = e >> 1;
       ctx.fillStyle = `hsl(0, 0%, 25%, ${cur & e ? 80 : 20}%)`;
-      ctx.fillRect(x + c * 120, y + r * 120, 100, 100);
+      ctx.fillRect(x + c * size * 1.2, y + r * size * 1.2, size, size);
     }
   }
 
