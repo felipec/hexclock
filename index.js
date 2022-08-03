@@ -64,7 +64,8 @@ function draw(progress) {
   ctx.textBaseline = 'hanging';
 
   const text = (10000 + value).toString().replace(/1(..)(..)/, '$1:$2');
-  ctx.fillText(text, canvas.width / 2, (canvas.height + height) / 2 + 40);
+  const hex_text = ((0x10000 + cur) | 0).toString(16).slice(1).toUpperCase();
+  ctx.fillText(hex_text + '/' + text, canvas.width / 2, (canvas.height + height) / 2 + 40);
 }
 
 function resizeCanvas() {
