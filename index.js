@@ -2,9 +2,19 @@ const ctx = canvas.getContext('2d');
 
 const total_seconds = 24 * 60 * 60;
 
+function draw_hex(x, y, time) {
+  let e = 1 << 16;
+  for (r = 0; r < 2; r++) {
+    for (c = 0; c < 4; c++) {
+      e = e >> 1;
+      ctx.fillStyle = `hsl(0, 0%, 25%, ${time & e ? 80 : 20}%)`;
+      ctx.fillRect(x + c * size * 1.2, y + r * size * 1.2, size, size);
+    }
+  }
+}
+
 function draw(progress) {
   const rows = 2, cols = 4;
-  const size = 100;
   const width = size * 1.2 * cols;
   const height = size * 1.2 * rows;
   let x = (canvas.width - width) / 2;
@@ -14,14 +24,7 @@ function draw(progress) {
   ctx.fillStyle = `hsl(${progress * 360}, 50%, 75%)`;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  let e = 1 << 16;
-  for (r = 0; r < rows; r++) {
-    for (c = 0; c < cols; c++) {
-      e = e >> 1;
-      ctx.fillStyle = `hsl(0, 0%, 25%, ${cur & e ? 80 : 20}%)`;
-      ctx.fillRect(x + c * size * 1.2, y + r * size * 1.2, size, size);
-    }
-  }
+  draw_hex(x, y, cur);
 
   const standard = progress * total_seconds;
   const value = ((standard / 3600) | 0) * 100 + (standard / 60 % 60) | 0;
@@ -39,6 +42,8 @@ function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 }
+
+const size = 100;
 
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas, false);
