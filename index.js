@@ -13,6 +13,17 @@ function draw_hex(x, y, time) {
   }
 }
 
+function draw_bcd(x, y, time) {
+ for (c = 0; c < 4; c++) {
+   const d = ((time / 10 ** (4 - 1 - c)) % 10) | 0;
+   for (r = 0; r < 4; r++) {
+     const e = d & (1 << (4 - 1 - r));
+     ctx.fillStyle = `hsl(0, 0%, 25%, ${e ? 80 : 20}%)`;
+     ctx.fillRect(x + c * size * 1.2, y + r * size * 1.2, size, size);
+   }
+ }
+}
+
 function get_box(rows, cols) {
   const width = size * (1.2 * cols - 0.2);
   const height = size * (1.2 * rows - 0.2);
@@ -30,10 +41,22 @@ function draw(progress) {
   ctx.fillStyle = `hsl(${progress * 360}, 50%, 75%)`;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  [width, height] = get_box(2, 4);
-  x = (canvas.width - width) / 2;
-  y = (canvas.height - height) / 2;
-  draw_hex(x, y, cur);
+  if (mode == 'cmp') {
+    [width, height] = get_box(2, 4);
+    x = canvas.width / 2 - width - size / 2;
+    y = (canvas.height - height) / 2;
+    draw_hex(x, y, cur);
+
+    [width, height] = get_box(4, 4);
+    x = canvas.width / 2 + size / 2;
+    y = (canvas.height - height) / 2;
+    draw_bcd(x, y, value);
+  } else {
+    [width, height] = get_box(2, 4);
+    x = (canvas.width - width) / 2;
+    y = (canvas.height - height) / 2;
+    draw_hex(x, y, cur);
+  }
 
   ctx.fillStyle = `hsl(0, 0%, 25%, 80%)`;
   ctx.font = '48px monospace';
@@ -49,7 +72,9 @@ function resizeCanvas() {
   canvas.height = window.innerHeight;
 }
 
-const size = 100;
+const params = new URLSearchParams(window.location.search);
+const mode = params.get('mode');
+const size = mode == 'cmp' ? 80 : 100;
 
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas, false);
