@@ -20,26 +20,28 @@ function get_box(rows, cols) {
 }
 
 function draw(progress) {
-  const [width, height] = get_box(2, 4);
-  let x = (canvas.width - width) / 2;
-  let y = (canvas.height - height) / 2;
+  let width, height;
+  let x, y;
 
-  let cur = progress * (2 ** 16);
+  const cur = progress * (2 ** 16);
+  const standard = progress * total_seconds;
+  const value = ((standard / 3600) | 0) * 100 + (standard / 60 % 60) | 0;
+
   ctx.fillStyle = `hsl(${progress * 360}, 50%, 75%)`;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  [width, height] = get_box(2, 4);
+  x = (canvas.width - width) / 2;
+  y = (canvas.height - height) / 2;
   draw_hex(x, y, cur);
-
-  const standard = progress * total_seconds;
-  const value = ((standard / 3600) | 0) * 100 + (standard / 60 % 60) | 0;
-  const text = (10000 + value).toString().replace(/1(..)(..)/, '$1:$2');
 
   ctx.fillStyle = `hsl(0, 0%, 25%, 80%)`;
   ctx.font = '48px monospace';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'hanging';
 
-  ctx.fillText(text, canvas.width / 2, y + height + 40);
+  const text = (10000 + value).toString().replace(/1(..)(..)/, '$1:$2');
+  ctx.fillText(text, canvas.width / 2, (canvas.height + height) / 2 + 40);
 }
 
 function resizeCanvas() {
