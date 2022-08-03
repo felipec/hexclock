@@ -4,7 +4,7 @@ const total_seconds = 24 * 60 * 60;
 
 function draw_hex(x, y, time) {
   let e = 1 << 16;
-  for (r = 0; r < 2; r++) {
+  for (r = 0; r < 4; r++) {
     for (c = 0; c < 4; c++) {
       e = e >> 1;
       ctx.fillStyle = `hsl(0, 0%, 25%, ${time & e ? 80 : 20}%)`;
@@ -42,7 +42,7 @@ function draw(progress) {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   if (mode == 'cmp') {
-    [width, height] = get_box(2, 4);
+    [width, height] = get_box(4, 4);
     x = canvas.width / 2 - width - size / 2;
     y = (canvas.height - height) / 2;
     draw_hex(x, y, cur);
@@ -52,7 +52,7 @@ function draw(progress) {
     y = (canvas.height - height) / 2;
     draw_bcd(x, y, value);
   } else {
-    [width, height] = get_box(2, 4);
+    [width, height] = get_box(4, 4);
     x = (canvas.width - width) / 2;
     y = (canvas.height - height) / 2;
     draw_hex(x, y, cur);
