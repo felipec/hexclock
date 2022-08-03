@@ -13,10 +13,14 @@ function draw_hex(x, y, time) {
   }
 }
 
+function get_box(rows, cols) {
+  const width = size * (1.2 * cols - 0.2);
+  const height = size * (1.2 * rows - 0.2);
+  return [width, height];
+}
+
 function draw(progress) {
-  const rows = 2, cols = 4;
-  const width = size * 1.2 * cols;
-  const height = size * 1.2 * rows;
+  const [width, height] = get_box(2, 4);
   let x = (canvas.width - width) / 2;
   let y = (canvas.height - height) / 2;
 
